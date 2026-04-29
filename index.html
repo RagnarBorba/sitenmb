@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NMB - Desenvolvimento de Sites de Alta Conversão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'poppins', sans-serif;
+            scroll-behavior: smooth;
+
+        }
+
+        /* Se encontrar isso, apague ou mude para none */
+        h1 {
+            text-transform: uppercase;
+        }
+
+        .bg-dark {
+            background-color: #0a0a0a;
+        }
+
+        .bg-card {
+            background-color: #141414;
+        }
+
+        .text-neon {
+            background: linear-gradient(90deg, #b5179e 0%, #7209b7 50%, #7f26e4 100%);
+            -webkit-background-clip: text;
+            /* Recorta o fundo no formato do texto (Chrome/Safari) */
+            background-clip: text;
+            /* Recorta o fundo no formato do texto (Padrão) */
+            -webkit-text-fill-color: transparent;
+            /* Torna a cor original da fonte transparente */
+            color: transparent;
+            /* Garantia de transparência para outros navegadores */
+            display: inline-block;
+            /* Garante que o gradiente se comporte corretamente */
+        }
+
+        .bg-neon {
+            background: linear-gradient(90deg, #b5179e 0%, #7209b7 50%, #560bad 100%);
+            color: white !important;
+        }
+
+        .video-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -2;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+
+        /* 1. Mude o foco dos inputs de verde para roxo/magenta */
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #7209b7 !important;
+            /* Cor central do seu degrade */
+            box-shadow: 0 0 10px rgba(114, 9, 183, 0.3);
+            /* Brilho roxo suave */
+        }
+
+        /* 2. Adicione estas classes para limpar os efeitos de brilho do Tailwind que eram verdes */
+
+        /* Cor de fundo para ícones e círculos de destaque */
+        .bg-neon\/10 {
+            background-color: rgba(114, 9, 183, 0.1) !important;
+        }
+
+        .bg-neon\/20 {
+            background-color: rgba(114, 9, 183, 0.2) !important;
+        }
+
+        /* Ajuste de bordas no hover dos cards */
+        .hover\:border-neon\/50:hover {
+            border-color: rgba(181, 23, 158, 0.5) !important;
+        }
+
+        /* Sombra de brilho dos botões da Hero e Formulário */
+        .hover\:shadow-\[0_0_30px_rgba\(204\255\0\0\.6\)\]:hover {
+            box-shadow: 0 0 30px rgba(181, 23, 158, 0.6) !important;
+        }
+
+        /* Cor dos ícones SVG quando estão dentro de um link ou texto neon */
+        .text-neon svg {
+            stroke: url(#gradient-id);
+        }
+
+        /* Nota: Gradientes em SVG são complexos, o ideal aqui é usar a cor sólida #7209b7 */
+        .text-neon svg {
+            stroke: #7209b7;
+        }
+
+        /* [ALTERAÇÃO: Estilo para o FAQ Accordion] */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        /* ... (mantenha os códigos anteriores do FAQ) ... */
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        /* [ADICIONE ESTE BLOCO ABAIXO DO FAQ] */
+
+        /* 1. Redefine o brilho de todos os botões que usam bg-neon */
+        .bg-neon:hover {
+            box-shadow: 0 0 30px rgba(181, 23, 158, 0.6) !important;
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        /* 2. Força a substituição da sombra específica que o Tailwind criou no HTML */
+        .hover\:shadow-\[0_0_30px_rgba\(204\255\0\0\.6\)\]:hover {
+            box-shadow: 0 0 30px rgba(114, 9, 183, 0.6) !important;
+        }
+
+        /* 3. Ajusta o foco dos inputs para o tom de roxo */
+        input:focus,
+        textarea:focus {
+            border-color: #7209b7 !important;
+            box-shadow: 0 0 10px rgba(114, 9, 183, 0.3) !important;
+        }
+
+        /* Container que esconde o que sai da tela */
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            width: 100%;
+        }
+
+        /* Onde a mágica acontece */
+        .marquee-content {
+            display: flex;
+            width: max-content;
+            animation: scroll-marquee 25s linear infinite;
+        }
+
+        /* O item individual com espaçamento fixo */
+        .marquee-item {
+            flex: 0 0 auto;
+            padding: 0 3rem;
+            /* Espaço fixo de 48px entre cada logo */
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            transition: max-height 0.3s ease-in-out;
+        }
+
+        .neon-divider {
+            position: relative;
+        }
+
+        /* Criando o brilho sutil na parte superior da seção */
+        .neon-divider::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 10%;
+            /* Começa um pouco depois da borda esquerda */
+            right: 10%;
+            /* Termina um pouco antes da borda direita */
+            height: 1px;
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    #b5179e 30%,
+                    #7209b7 70%,
+                    transparent 100%);
+            box-shadow: 0 -5px 15px rgba(114, 9, 183, 0.4);
+            /* O "glow" (brilho) */
+            opacity: 0.6;
+            /* Controle a intensidade do brilho aqui */
+        }
+
+        /* Brilho sutil na parte INFERIOR */
+        .neon-divider-bottom {
+            position: relative;
+        }
+
+        .neon-divider-bottom::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    #b5179e 30%,
+                    #7209b7 70%,
+                    transparent 100%);
+            box-shadow: 0 5px 15px rgba(114, 9, 183, 0.4);
+            opacity: 0.6;
+        }
+
+        /* Brilho sutil nos 4 CANTOS (Contorno Neon) */
+        .neon-glow-all {
+            position: relative;
+            /* Adiciona uma borda quase invisível para o brilho "grudar" nela */
+            border: 1px solid rgba(114, 9, 183, 0.1);
+            border-radius: 24px;
+            /* Ajuste conforme a curvatura dos seus blocos */
+            box-shadow: 0 0 20px rgba(114, 9, 183, 0.2);
+            transition: box-shadow 0.3s ease;
+        }
+
+        /* Efeito opcional: brilha mais quando passa o mouse */
+        .neon-glow-all:hover {
+            box-shadow: 0 0 35px rgba(114, 9, 183, 0.4);
+            border: 1px solid rgba(181, 23, 158, 0.3);
+        }
+
+        @keyframes scroll-marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+
+            /* Move exatamente metade do conteúdo total */
+        }
+
+        /* Pausa ao passar o mouse */
+        .marquee-content:hover {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+
+<body class="bg-dark text-white antialiased ">
+
+    <a href="https://wa.me/5531983459288?text=Ol%C3%A1%2C%20vim%20do%20site%20e%20quero%20saber%20mais%20sobre%20landing%20page!"
+        target="_blank"
+        class="fixed bottom-6 right-6 z-[60] bg-neon p-4 rounded-full  hover:scale-110 transition-transform">
+        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.067 2.877 1.215 3.076.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        </svg>
+    </a>
+
+    <header class="fixed w-full z-50 bg-dark/60 backdrop-blur-md border-b border-white/10">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center neon-divider-bottom py-20">
+            <a href="#inicio" class="flex items-center">
+                <img src="img/logo branca.svg" alt="NMB Logo" class="h-10 md:h-12 w-auto object-contain">
+            </a>
+            <nav class="hidden md:flex space-x-8 font-medium">
+                <a href="#inicio" class="hover:text-neon transition">Início</a>
+                <a href="#servicos" class="hover:text-neon transition">Serviços</a>
+                <a href="#portfolio" class="hover:text-neon transition">Portfólio</a>
+                <a href="#contato" class="hover:text-neon transition">Contato</a>
+            </nav>
+            <a href="#contato"
+                class="bg-neon px-6 py-2 rounded-full font-bold text-sm hover:scale-105 transition transform  tracking-tight shadow-lg">
+                Orçamento
+            </a>
+        </div>
+    </header>
+
+    <section id="inicio" class="relative min-h-screen flex items-center overflow-hidden">
+        <video autoplay loop muted playsinline class="video-bg">
+            <source src="img/video-hero.mp4" type="video/mp4">
+        </video>
+        <div class="absolute inset-0 bg-black/70 z-[-1]"></div>
+        <div class="container mx-auto px-4 z-10 pt-32 pb-24 md:pt-48 md:pb-32">
+            <div class="max-w-4xl text-center md:text-left">
+                <h1
+                    class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black leading-tight mb-6 normal-case break-words">
+                    Transformamos
+                    visitantes em <span class="text-neon">clientes.</span></h1>
+                <p class="text-gray-300 text-lg md:text-2xl mb-10 max-w-2xl leading-relaxed">Landing pages de alta
+                    performance desenhadas para converter o seu tráfego pago em faturamento real.</p>
+                <div class="flex flex-col sm:flex-row gap-5">
+                    <a href="#contato"
+                        class="bg-neon text-black px-10 py-5 rounded-xl font-black text-xl hover:shadow-[0_0_30px_rgba(204,255,0,0.6)] transition text-center">Quero
+                        escalar meu negócio</a>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-dark to-transparent"></div>
+    </section>
+
+    <section class="bg-dark py-20 border-b border-white/5">
+        <div class="container mx-auto px-4">
+            <p class="text-neon font-bold uppercase tracking-widest text-sm mb-12 text-center w-full">
+                Empresas que escalaram seus resultados com a NMB
+            </p>
+
+            <div class="marquee-container">
+                <div class="marquee-content">
+
+                    <div class="flex items-center">
+                        <div class="marquee-item"><img src="img/44garagem.svg"
+                                class="h-10 md:h-14 opacity-30 grayscale object-contain"></div>
+                        <div class="marquee-item"><img src="img/advogadacarlaguerreiro.svg"
+                                class="h-10 md:h-14 opacity-30 grayscale object-contain"></div>
+                        <div class="marquee-item"><img src="img/blackfit.svg"
+                                class="h-10 md:h-14 opacity-30 grayscale object-contain"></div>
+                        <div class="marquee-item"><img src="img/uniqueperformance.svg"
+                                class="h-10 md:h-14 opacity-30 grayscale object-contain"></div>
+                        <div class="marquee-item"><img src="img/upmarketingmedico.svg"
+                                class="h-10 md:h-14 opacity-30 grayscale object-contain"></div>
+                        <div class="marquee-item"><img src="img/vx.svg"
+                                class="h-10 md:h-14 opacity-30 grayscale object-contain"></div>
+                    </div>
+
+                    <div class="flex items-center">
+                        <div class="marquee-item"><img src="img/44garagem.svg"
+                                class="h-10 md:h-14 opacity-30 grayscale object-contain"></div>
+                        <div class="marquee-item"><img src="img/advogadacarlaguerreiro.svg"
+                                class="h-10 md:h-14 opacity-30 grayscale object-contain"></div>
+                        <div class="marquee-item"><img src="img/blackfit.svg"
+                                class="h-10 md:h-14 opacity-30 grayscale object-contain"></div>
+                        <div class="marquee-item"><img src="img/uniqueperformance.svg"
+                                class="h-10 md:h-14 opacity-30 grayscale object-contain"></div>
+                        <div class="marquee-item"><img src="img/upmarketingmedico.svg"
+                                class="h-10 md:h-14 opacity-30 grayscale object-contain"></div>
+                        <div class="marquee-item"><img src="img/vx.svg"
+                                class="h-10 md:h-14 opacity-30 grayscale object-contain"></div>
+                    </div>
+
+                </div>
+
+    </section>
+
+    <section id="servicos" class="bg-dark py-24">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-neon font-bold uppercase tracking-widest text-sm mb-4">O que oferecemos</h2>
+                <p class="text-4xl md:text-5xl">Soluções completas para seu <span
+                        class="text-neon bg-transparent py-2">negócio crescer</span> </p>
+                <h2 class="pt-4 tracking-widest text-sm">Do conceito a entrega: tudo que
+                    sua marca precisa para se destacar online.</h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div
+                    class="bg-card p-8 rounded-3xl border border-white/5 hover:border-neon/50 transition-all group duration-500">
+                    <div
+                        class="w-14 h-14 bg-neon/10 rounded-2xl flex items-center justify-center mb-6 text-neon group-hover:bg-neon group-hover:text-black transition-all duration-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Landing Pages</h3>
+                    <p class="text-gray-400 leading-relaxed">Páginas focadas 100% em conversão. Estrutura otimizada para
+                        anúncios no Google e Meta, garantindo o menor custo por lead.</p>
+                </div>
+                <div
+                    class="bg-card p-8 rounded-3xl border border-white/5 hover:border-neon/50 transition-all group duration-500">
+                    <div
+                        class="w-14 h-14 bg-neon/10 rounded-2xl flex items-center justify-center mb-6 text-neon group-hover:bg-neon group-hover:text-black transition-all duration-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Sites Institucionais</h3>
+                    <p class="text-gray-400 leading-relaxed">Autoridade e profissionalismo para sua marca. Sites
+                        modernos, rápidos e totalmente responsivos para todos os dispositivos.</p>
+                </div>
+                <div
+                    class="bg-card p-8 rounded-3xl border border-white/5 hover:border-neon/50 transition-all group duration-500">
+                    <div
+                        class="w-14 h-14 bg-neon/10 rounded-2xl flex items-center justify-center mb-6 text-neon group-hover:bg-neon group-hover:text-black transition-all duration-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Identidade Visual</h3>
+                    <p class="text-gray-400 leading-relaxed">Marcas que ficam na memória. Criamos todo o universo visual
+                        do seu negócio para transmitir autoridade e confiança em cada ponto de contato.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-dark py-20 border-b border-white/5">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+
+                <div>
+                    <div class="text-5xl md:text-6xl font-bold text-neon mb-2">
+                        <span class="counter" data-target="10">0</span>+
+                    </div>
+                    <p class="text-white uppercase tracking-widest text-sm ">Anos de Experiência</p>
+                </div>
+
+                <div>
+                    <div class="text-5xl md:text-6xl font-bold text-neon mb-2">
+                        <span class="counter" data-target="200">0</span>+
+                    </div>
+                    <p class="text-white uppercase tracking-widest text-sm">Clientes Felizes</p>
+                </div>
+
+                <div>
+                    <div class="text-5xl md:text-6xl font-bold text-neon mb-2">
+                        <span class="counter" data-target="150">0</span>+
+                    </div>
+                    <p class="text-white uppercase tracking-widest text-sm">Marcas Criadas</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="bg-dark py-24 border-t border-white/5">
+
+        <div class="text-center mb-16">
+            <h2 class="text-neon font-bold uppercase tracking-widest text-sm mb-4">Portifólio</h2>
+            <p class="text-4xl md:text-5xl">Projetos que <span class="text-neon bg-transparent py-2">geram
+                    resultados</span> </p>
+            <h2 class="pt-4 tracking-widest text-sm">Cada projeto é único. Veja alguns dos trabalhos que já
+                transformaram negócios.</h2>
+        </div>
+
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="group relative overflow-hidden rounded-3xl bg-card border border-white/10">
+                    <img src="img/site vx.png" alt="VX Restaurações"
+                        class="w-full h-[400px] object-cover transition duration-700 group-hover:scale-110 group-hover:opacity-30">
+                    <div
+                        class="absolute inset-0 flex flex-col justify-end p-8 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 bg-gradient-to-t from-black to-transparent">
+                        <h4 class="text-2xl font-black uppercase mb-2">VX Restaurações</h4>
+                        <p class="text-gray-400 mb-6 text-sm">Landing Page de Alta Conversão.</p>
+                        <a href="https://www.vauneyxavierrestauracoes.com.br/" target="_blank"
+                            class="bg-neon text-black text-center py-3 rounded-xl font-bold text-sm ">Ver
+                            Projeto</a>
+                    </div>
+                </div>
+                <div class="group relative overflow-hidden rounded-3xl bg-card border border-white/10">
+                    <img src="img/site dr vinicius.png" alt="Dr Vinicius"
+                        class="w-full h-[400px] object-cover transition duration-700 group-hover:scale-110 group-hover:opacity-30">
+                    <div
+                        class="absolute inset-0 flex flex-col justify-end p-8 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 bg-gradient-to-t from-black to-transparent">
+                        <h4 class="text-2xl font-black uppercase mb-2">Dr Vinicius</h4>
+                        <p class="text-gray-400 mb-6 text-sm">Site Institucional Moderno.</p>
+                        <a href="https://drviniciusalves.com.br/" target="_blank"
+                            class="bg-neon text-black text-center py-3 rounded-xl font-bold text-sm">Ver
+                            Projeto</a>
+                    </div>
+                </div>
+                <div class="group relative overflow-hidden rounded-3xl bg-card border border-white/10">
+                    <img src="img/site advogada carla.png" alt="Advogada Carla"
+                        class="w-full h-[400px] object-cover transition duration-700 group-hover:scale-110 group-hover:opacity-30">
+                    <div
+                        class="absolute inset-0 flex flex-col justify-end p-8 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 bg-gradient-to-t from-black to-transparent">
+                        <h4 class="text-2xl font-black uppercase mb-2">Advogada Carla</h4>
+                        <p class="text-gray-400 mb-6 text-sm">Página de Captura Premium.</p>
+                        <a href="https://advogadacarla.com/" target="_blank"
+                            class="bg-neon text-black text-center py-3 rounded-xl font-bold text-sm">Ver
+                            Projeto</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-dark py-24 border-b border-white/5">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row gap-16">
+
+                <div class="lg:w-1/3 text-center md:text-left">
+                    <p class="text-neon font-bold uppercase tracking-widest text-sm mb-4">
+                        Como Funciona
+                    </p>
+                    <h2 class="text-4xl md:text-5xl  text-white leading-tight mb-6 poppins">
+                        Do briefing ao <span class="text-neon">lançamento</span>
+                    </h2>
+                    <p class="text-white text-lg mb-10 leading-relaxed">
+                        Um processo simples e transparente para você acompanhar cada etapa do desenvolvimento do seu
+                        projeto.
+                    </p>
+                    <a href="#contato"
+                        class="bg-neon text-white px-8 py-4 rounded-xl font-bold inline-flex items-center gap-3 hover:scale-105 transition-transform group">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                            </path>
+                        </svg>
+                        Iniciar meu projeto
+                    </a>
+                </div>
+
+                <div class="lg:w-2/3 relative">
+                    <div
+                        class="absolute left-6 top-0 h-full w-0.5 bg-gradient-to-b from-[#b5179e] to-[#560bad] opacity-20 hidden md:block">
+                    </div>
+
+                    <div class="space-y-12">
+                        <div class="relative pl-0 md:pl-16 flex flex-col md:flex-row gap-6">
+                            <div
+                                class="absolute left-0 top-0 w-12 h-12 bg-neon rounded-full flex items-center justify-center text-white font-bold z-10 hidden md:flex shadow-[0_0_15px_rgba(114,9,183,0.4)]">
+                                1</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-2">Briefing & Estratégia</h3>
+                                <p class="text-gray-400 leading-relaxed">Entendemos seu negócio, público e objetivos
+                                    para criar uma estratégia personalizada.</p>
+                            </div>
+                        </div>
+
+                        <div class="relative pl-0 md:pl-16 flex flex-col md:flex-row gap-6">
+                            <div
+                                class="absolute left-0 top-0 w-12 h-12 bg-neon rounded-full flex items-center justify-center text-white font-bold z-10 hidden md:flex shadow-[0_0_15px_rgba(114,9,183,0.4)]">
+                                2</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-2">Design & Criação</h3>
+                                <p class="text-gray-400 leading-relaxed">Desenvolvemos layouts e identidade visual
+                                    alinhados com sua marca.</p>
+                            </div>
+                        </div>
+
+                        <div class="relative pl-0 md:pl-16 flex flex-col md:flex-row gap-6">
+                            <div
+                                class="absolute left-0 top-0 w-12 h-12 bg-neon rounded-full flex items-center justify-center text-white font-bold z-10 hidden md:flex shadow-[0_0_15px_rgba(114,9,183,0.4)]">
+                                3</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-2">Desenvolvimento</h3>
+                                <p class="text-gray-400 leading-relaxed">Transformamos o design em código funcional,
+                                    rápido e responsivo.</p>
+                            </div>
+                        </div>
+
+                        <div class="relative pl-0 md:pl-16 flex flex-col md:flex-row gap-6">
+                            <div
+                                class="absolute left-0 top-0 w-12 h-12 bg-neon rounded-full flex items-center justify-center text-white font-bold z-10 hidden md:flex shadow-[0_0_15px_rgba(114,9,183,0.4)]">
+                                4</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-2">Lançamento & Otimização</h3>
+                                <p class="text-gray-400 leading-relaxed">Publicamos seu projeto e acompanhamos os
+                                    resultados iniciais.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-dark py-24 border-t border-white/5">
+        <div class="container mx-auto px-4 max-w-3xl">
+            <div class="text-center mb-16">
+                <h2 class="text-neon font-bold uppercase tracking-widest text-sm mb-4">Dúvidas Frequentes</h2>
+                <p class="text-4xl md:text-5xl  text-white leading-tight mb-6 poppins">
+                    Tudo o que você <span class="text-neon">precisa saber</span>
+                </p>
+
+            </div>
+
+            <div class="faq-item bg-card border border-white/5 rounded-2xl overflow-hidden mb-4">
+                <button
+                    class="faq-question w-full px-8 py-6 text-left flex justify-between items-center hover:bg-white/5 transition-colors">
+                    <span class="text-lg md:text-xl font-bold text-white">Quanto tempo demora para meu site ficar
+                        pronto?</span>
+                    <svg class="faq-icon w-6 h-6 text-neon transition-transform duration-300" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                    <div class="px-8 pb-6 text-gray-400 leading-relaxed">
+                        O prazo médio para entrega de uma Landing Page é de 7 a 10 dias úteis, dependendo da
+                        complexidade e do envio de materiais.
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item bg-card border border-white/5 rounded-2xl overflow-hidden mb-4">
+                <button
+                    class="faq-question w-full px-8 py-6 text-left flex justify-between items-center hover:bg-white/5 transition-colors">
+                    <span class="text-lg md:text-xl font-bold text-white">O site já vem otimizado para o Google?</span>
+                    <svg class="faq-icon w-6 h-6 text-neon transition-transform duration-300" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                    <div class="px-8 pb-6 text-gray-400 leading-relaxed">
+                        Sim! Todos os nossos projetos seguem as melhores práticas de SEO On-Page para garantir que sua
+                        marca tenha autoridade nos buscadores.
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item bg-card border border-white/5 rounded-2xl overflow-hidden mb-4">
+                <button
+                    class="faq-question w-full px-8 py-6 text-left flex justify-between items-center hover:bg-white/5 transition-colors">
+                    <span class="text-lg md:text-xl font-bold text-white">Vocês configuram o Pixel do Facebook e
+                        Google?</span>
+                    <svg class="faq-icon w-6 h-6 text-neon transition-transform duration-300" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                    <div class="px-8 pb-6 text-gray-400 leading-relaxed">
+                        Com certeza. Instalamos e testamos todos os eventos de conversão para que suas métricas de
+                        anúncios sejam 100% precisas.
+
+                    </div>
+                </div>
+            </div>
+
+
+
+    </section>
+
+    <section id="contato" class="bg-dark py-24 border-t border-white/5">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row gap-16">
+                <div class="lg:w-1/3">
+                    <h2 class="text-neon font-bold uppercase tracking-widest text-sm mb-4">Contato</h2>
+                    <p class="text-4xl md:text-5xl mb-8 leading-tight">Vamos tirar seu projeto do
+                        <span class="text-neon">papel?</span>
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 bg-card rounded-full flex items-center justify-center text-neon border border-white/5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <span class="text-white">contato@novomktbrasil.com.br</span>
+                    </div>
+                </div>
+                <div class="lg:w-2/3">
+                    <div
+                        class="bg-card p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl neon-glow-all p-8 bg-card">
+                        <form action="enviar.php" method="POST" class="grid md:grid-cols-2 gap-6">
+                            <div class="flex flex-col">
+                                <label class="text-xs uppercase font-bold text-gray-500 mb-2 ml-1">Nome Completo</label>
+                                <input type="text" placeholder="Ex: João Silva"
+                                    class="bg-dark border border-white/10 rounded-xl px-5 py-4 text-white focus:ring-1 focus:ring-neon transition-all">
+                            </div>
+                            <div class="flex flex-col">
+                                <label class="text-xs uppercase font-bold text-gray-500 mb-2 ml-1">WhatsApp</label>
+                                <input type="text" placeholder="(00) 00000-0000"
+                                    class="bg-dark border border-white/10 rounded-xl px-5 py-4 text-white focus:ring-1 focus:ring-neon transition-all">
+                            </div>
+                            <div class="flex flex-col md:col-span-2">
+                                <label class="text-xs uppercase font-bold text-gray-500 mb-2 ml-1">Seu Objetivo</label>
+                                <textarea rows="4" placeholder="Conte o que precisa..."
+                                    class="bg-dark border border-white/10 rounded-xl px-5 py-4 text-white focus:ring-1 focus:ring-neon transition-all resize-none"></textarea>
+                            </div>
+                            <div class="md:col-span-2">
+                                <button type="submit" onclick="fbq('track', 'Lead');"
+                                    class="w-full bg-neon text-black font-black py-5 rounded-xl text-lg hover:shadow-[0_0_20px_rgba(204,255,0,0.4)] transition-all">Enviar
+                                    Solicitação</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark pt-10 pb-10 border-t border-white/10 neon-divider">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
+                <a href="#inicio" class="flex items-center">
+                    <img src="img/logo branca.svg" alt="NMB Logo" class="h-10 md:h-12 w-auto object-contain">
+                </a>
+
+                <div class="flex items-center gap-6 order-2 md:order-3">
+                    <a href="https://instagram.com/SEU_USER" target="_blank"
+                        class="text-white hover:text-neon transition-colors">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                    </a>
+
+                    <a href="https://wa.me/SEU_NUMERO" target="_blank"
+                        class="text-white hover:text-neon transition-colors">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.889 1.034 4.024 1.58 6.199 1.581h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="flex space-x-6 text-white font-medium">
+                    <a href="#inicio" class="hover:text-neon transition">Início</a>
+                    <a href="#servicos" class="hover:text-neon transition">Serviços</a>
+                    <a href="#portfolio" class="hover:text-neon transition">Portfólio</a>
+                    <a href="#contato" class="hover:text-neon transition">Contato</a>
+                </div>
+            </div>
+
+            <div class="text-center text-gray-600 text-sm border-t border-white/5 pt-8 neon-divider">
+                &copy; 2026 NMB - Especialistas em desenvolvimento de websites. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200; // Quanto maior, mais lento
+
+        const startCounters = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const updateCount = () => {
+                        const target = +counter.getAttribute('data-target');
+                        const count = +counter.innerText;
+                        const inc = target / speed;
+
+                        if (count < target) {
+                            counter.innerText = Math.ceil(count + inc);
+                            setTimeout(updateCount, 15);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+                    updateCount();
+                    observer.unobserve(counter); // Para a animação rodar apenas uma vez
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(startCounters, { threshold: 0.5 });
+        counters.forEach(counter => observer.observe(counter));
+    </script>
+
+    <script>
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                const isOpen = faqItem.classList.contains('active');
+
+                // Fecha todos os outros itens (Efeito Sanfona Única)
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                    item.querySelector('.faq-answer').style.maxHeight = null;
+                });
+
+                // Se o item clicado não estava aberto, abre ele
+                if (!isOpen) {
+                    faqItem.classList.add('active');
+                    const answer = faqItem.querySelector('.faq-answer');
+                    answer.style.maxHeight = answer.scrollHeight + "px";
+                }
+            });
+        });
+    </script>
+
+    <script>
+        const handlePhone = (event) => {
+            let input = event.target
+            input.value = phoneMask(input.value)
+        }
+
+        const phoneMask = (value) => {
+            if (!value) return ""
+            value = value.replace(/\D/g, '')
+            value = value.replace(/(\d{2})(\d)/, "($1) $2")
+            value = value.replace(/(\d{5})(\d)/, "$1-$2")
+            return value
+        }
+
+        // Aplica ao input com id="phone"
+        document.getElementById('phone').addEventListener('keyup', handlePhone)
+    </script>
+
+</body>
+
+</html>
